@@ -7,12 +7,18 @@ export interface CreateIssueInput {
   reporter_id: number;
 }
 
+
+//------------
+
 export interface UpdateIssueInput {
   title?: string;
   description?: string;
   type?: 'bug' | 'feature_request';
   status?: 'open' | 'in_progress' | 'resolved';
 }
+
+
+//--------------
 
 export interface IssueRow {
   id: number;
@@ -25,13 +31,16 @@ export interface IssueRow {
   updated_at: string;
 }
 
+
+//----------------
+
 export interface ReporterRow {
   id: number;
   name: string;
   role: string;
 }
 
-// Helper: fetch reporter details by IDs (no JOIN, separate query)
+// Helper- fetch reporter details by ID ------------
 const fetchReporters = async (reporterIds: number[]): Promise<Map<number, ReporterRow>> => {
   if (reporterIds.length === 0) return new Map();
 
@@ -48,7 +57,7 @@ const fetchReporters = async (reporterIds: number[]): Promise<Map<number, Report
 export const createIssue = async (input: CreateIssueInput) => {
   const { title, description, type, reporter_id } = input;
 
-  // Validate reporter exists
+  // Validate reporter exists -----------------
   const userCheck = await pool.query('SELECT id FROM users WHERE id = $1', [reporter_id]);
   if (userCheck.rows.length === 0) {
     throw { statusCode: 404, message: 'Reporter not found.' };
@@ -71,7 +80,7 @@ export const getAllIssues = async (filters: {
 }) => {
   const { sort = 'newest', type, status } = filters;
 
-  // Build dynamic WHERE clause safely
+  // Build dynamic -------------------
   const conditions: string[] = [];
   const values: unknown[] = [];
   let idx = 1;
@@ -96,7 +105,7 @@ export const getAllIssues = async (filters: {
 
   const issues = result.rows;
 
-  // Fetch reporters separately (no JOIN)
+  // Fetch reporters separately--------------------
   const reporterIds = [...new Set(issues.map((i) => i.reporter_id))];
   const reporterMap = await fetchReporters(reporterIds);
 
@@ -118,7 +127,7 @@ export const getIssueById = async (id: number) => {
 
   const issue = result.rows[0];
 
-  // Fetch reporter separately
+  // Fetch reporter separately----------------
   const reporterResult = await pool.query<ReporterRow>(
     'SELECT id, name, role FROM users WHERE id = $1',
     [issue.reporter_id]
@@ -137,7 +146,7 @@ export const updateIssue = async (
   requesterId: number,
   requesterRole: string
 ) => {
-  // Fetch the issue first
+  // Fetch the issue first-----------------
   const result = await pool.query<IssueRow>('SELECT * FROM issues WHERE id = $1', [id]);
 
   if (result.rows.length === 0) {
@@ -146,7 +155,7 @@ export const updateIssue = async (
 
   const issue = result.rows[0];
 
-  // Permission check
+  // Permission check---------------------------
   if (requesterRole === 'contributor') {
     if (issue.reporter_id !== requesterId) {
       throw { statusCode: 403, message: 'You can only update your own issues.' };
@@ -158,7 +167,7 @@ export const updateIssue = async (
     delete input.status;
   }
 
-  // Build SET clause dynamically
+  // Build SET clause dynamically---------------------
   const fields: string[] = [];
   const values: unknown[] = [];
   let idx = 1;
