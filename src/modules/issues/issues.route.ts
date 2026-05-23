@@ -4,6 +4,8 @@ import { authenticate, authorizeMaintainer } from '../../middleware/auth';
 
 const router = Router();
 
+
+// all routerssssssssssss-------------------------
 router.post('/', authenticate, create);
 router.get('/', getAll);
 router.get('/:id', getOne);

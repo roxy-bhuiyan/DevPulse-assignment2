@@ -1,36 +1,38 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import {
-  createIssue,
-  getAllIssues,
-  getIssueById,
-  updateIssue,
-  deleteIssue,
-} from './issues.service';
+import {createIssue, getAllIssues, getIssueById, updateIssue, deleteIssue,} from './issues.service';
 import { sendSuccess, sendError } from '../../utils/response';
+
+
 
 export const create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { title, description, type } = req.body;
     const reporter_id = req.user!.id;
 
-    // Validation
+    // Validation (if)---- 
     if (!title || !description || !type) {
       sendError(res, StatusCodes.BAD_REQUEST, 'Title, description, and type are required.');
       return;
     }
+
     if (title.length > 150) {
       sendError(res, StatusCodes.BAD_REQUEST, 'Title must be at most 150 characters.');
       return;
-    }
+    } 
+
+
     if (description.length < 20) {
       sendError(res, StatusCodes.BAD_REQUEST, 'Description must be at least 20 characters.');
       return;
     }
+
+
+
     if (!['bug', 'feature_request'].includes(type)) {
       sendError(res, StatusCodes.BAD_REQUEST, 'Type must be bug or feature_request.');
       return;
-    }
+    };
 
     const issue = await createIssue({ title, description, type, reporter_id });
     sendSuccess(res, StatusCodes.CREATED, 'Issue created successfully', issue);
@@ -43,6 +45,9 @@ export const create = async (req: Request, res: Response, next: NextFunction): P
     }
   }
 };
+
+
+
 
 export const getAll = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
