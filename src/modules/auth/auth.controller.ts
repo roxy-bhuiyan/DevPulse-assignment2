@@ -7,7 +7,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction): P
   try {
     const { name, email, password, role } = req.body;
 
-    // Basic validation
+    // validation ----------------
     if (!name || !email || !password) {
       sendError(res, StatusCodes.BAD_REQUEST, 'Name, email, and password are required.');
       return;
