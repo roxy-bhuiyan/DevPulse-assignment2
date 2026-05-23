@@ -18,6 +18,8 @@ declare global {
   }
 };
 
+
+//------------------------------
 export const authenticate = (req: Request, res: Response, next: NextFunction): void => {
   const token = req.headers['authorization'];
 
@@ -44,5 +46,7 @@ export const authorizeMaintainer = (req: Request, res: Response, next: NextFunct
     sendError(res, StatusCodes.FORBIDDEN, 'Access denied. Maintainer role required.');
     return;
   }
+
+  
   next();
 };

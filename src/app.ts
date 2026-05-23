@@ -29,7 +29,7 @@ app.use((_req, res) => {
   res.status(404).json({ success: false, message: 'Route not found.' });
 });
 
-// Global error handler -----------------
+// Global error handler -------------------
 app.use(errorHandler);
 
 app.listen(PORT, () => {
