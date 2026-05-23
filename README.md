@@ -4,7 +4,7 @@ Internal Tech Issue & Feature Tracker
 A collaborative platform for software teams to report bugs, suggest features, and coordinate resolutions.
 
 ## live url
-``
+`https://dev-pulse-assignment2.vercel.app/`
 
 ## Tech Stack
 - Node.js + TypeScript + Express.js + PostgreSQL (NeonDB) + bcrypt + jsonwebtoken
