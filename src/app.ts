@@ -11,25 +11,25 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middlewares
+// Middlewares -----------------
 app.use(cors());
 app.use(express.json());
 
-// Health check
+// Health check---------------------
 app.get('/', (_req, res) => {
   res.json({ success: true, message: '🚀 DevPulse API is running!' });
 });
 
-// Routes
+// Routes------------------------
 app.use('/api/auth', authRoutes);
 app.use('/api/issues', issuesRoutes);
 
-// 404 handler
+// 404 handler ----------------
 app.use((_req, res) => {
   res.status(404).json({ success: false, message: 'Route not found.' });
 });
 
-// Global error handler
+// Global error handler -----------------
 app.use(errorHandler);
 
 app.listen(PORT, () => {

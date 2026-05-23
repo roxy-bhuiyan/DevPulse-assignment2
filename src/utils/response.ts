@@ -7,7 +7,7 @@ export const sendSuccess = (
   data?: unknown
 ) => {
   const body: Record<string, unknown> = { success: true, message };
-  // Only attach data field when it's actually provided (not undefined)
+  // Only attach data field - not undefined
   if (data !== undefined) body.data = data;
   res.status(statusCode).json(body);
 };
