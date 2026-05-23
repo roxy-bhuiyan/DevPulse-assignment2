@@ -7,16 +7,16 @@ export interface JwtPayload {
   id: number;
   name: string;
   role: 'contributor' | 'maintainer';
-}
+};
 
-// Extend Express Request to include user
+// Request --- include user
 declare global {
   namespace Express {
     interface Request {
       user?: JwtPayload;
     }
   }
-}
+};
 
 export const authenticate = (req: Request, res: Response, next: NextFunction): void => {
   const token = req.headers['authorization'];
@@ -26,6 +26,7 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
     return;
   }
 
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
     req.user = decoded;
@@ -34,6 +35,9 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
     sendError(res, StatusCodes.UNAUTHORIZED, 'Invalid or expired token.');
   }
 };
+
+
+//-------
 
 export const authorizeMaintainer = (req: Request, res: Response, next: NextFunction): void => {
   if (req.user?.role !== 'maintainer') {
