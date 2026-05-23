@@ -9,8 +9,10 @@ A collaborative platform for software teams to report bugs, suggest features, an
 ## Tech Stack
 - Node.js + TypeScript + Express.js + PostgreSQL (NeonDB) + bcrypt + jsonwebtoken
 
-## API Endpoints
 
+
+
+## API Endpoints
 | Method | Endpoint | Access | Description |
 |--------|----------|--------|-------------|
 | POST | /api/auth/signup | Public | Register user |
@@ -22,7 +24,6 @@ A collaborative platform for software teams to report bugs, suggest features, an
 | DELETE | /api/issues/:id | Maintainer | Delete issue |
 
 ## Database Schema
-
 ### users
 | Column | Type | Notes |
 |--------|------|-------|
